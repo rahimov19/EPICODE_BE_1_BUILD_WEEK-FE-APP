@@ -48,6 +48,7 @@ function NavBar() {
           <img
             src="https://www.svgrepo.com/show/157006/linkedin.svg"
             alt="logo"
+            id="logoOnNavbar"
           />
         </Link>
         <div className="searchBar__div">

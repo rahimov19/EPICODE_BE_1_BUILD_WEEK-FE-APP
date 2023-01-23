@@ -15,6 +15,9 @@
   padding-left: 6vw;
   padding-right: 6vw;
 }
+#logoOnNavbar {
+  width: 40px;
+}
 .header2 {
   position: fixed;
   top: 3em;
