@@ -76,7 +76,7 @@ export const fetchAllUserAction = () => {
       let response = await fetch(`${apiUrl}/users/`);
       if (response.ok) {
         let data = await response.json();
-        dispatch(saveUsersAction(data));
+        dispatch(saveUsersAction(data.users));
       } else {
         console.log("error");
       }

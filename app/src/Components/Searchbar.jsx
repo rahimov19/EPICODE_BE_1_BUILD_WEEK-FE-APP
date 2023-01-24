@@ -44,6 +44,8 @@ function Searchbar({ user }) {
   const navigate = useNavigate();
 
   const goToProfile = (guest) => {
+    const searchBar = document.querySelector(".searchBar");
+    searchBar.reset();
     dispatch(guestUserAction(guest));
     navigate(`/guest/${guest._id}`);
   };
@@ -57,7 +59,7 @@ function Searchbar({ user }) {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        setData(data);
+        setData(data.users);
       } else {
         console.log("Error fetching data");
       }
@@ -71,6 +73,7 @@ function Searchbar({ user }) {
         <InputGroup
           onClick={() => onInputClick(false)}
           type="text"
+          className="searchBar"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);

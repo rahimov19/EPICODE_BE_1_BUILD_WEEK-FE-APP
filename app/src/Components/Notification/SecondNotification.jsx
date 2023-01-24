@@ -1,12 +1,15 @@
+import { useSelector } from "react-redux";
 import NotificationList from "./NotificationList";
 
-const SecondNotification = ({ title, profiles }) => {
+const SecondNotification = () => {
+  const users = useSelector((state) => state.user.users);
+
   return (
     <div className="sidebar-wrapper1">
-      <h5 className="my-3 mb-4">{title}</h5>
+      <h5 className="my-3 mb-4 ml-3">{users[0].name} notifications</h5>
 
-      {profiles &&
-        profiles
+      {users &&
+        users
           .slice(0, 20)
           .reverse()
           .map(({ _id, image, name, surname, title }) => (

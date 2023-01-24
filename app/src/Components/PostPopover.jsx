@@ -8,6 +8,8 @@ import Popover from "react-bootstrap/Popover";
 import { useForm } from "react-hook-form";
 
 export default function PostPopover(props) {
+  const apiUrl = process.env.REACT_APP_BE_URL;
+
   const { register } = useForm();
   const [image, setImage] = useState(null);
 
@@ -37,12 +39,10 @@ export default function PostPopover(props) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk2ZjAzMWM5NmRmYjAwMTUyMWE1YmIiLCJpYXQiOjE2NzA4MzYyODAsImV4cCI6MTY3MjA0NTg4MH0.-mjIeGuDeV798UyGFGMsc5ORRw1nL5qqVP2qkCqN7MY",
       },
     };
     try {
-      const endpoint = `https://striveschool-api.herokuapp.com/api/posts/${props.post._id}`;
+      const endpoint = `${apiUrl}/posts/${props.post._id}`;
       const response = await fetch(endpoint, options);
       if (response.ok) {
         alert("Post deleted successfully ");
@@ -122,19 +122,16 @@ export default function PostPopover(props) {
   const submitChanges = async () => {
     const formData = new FormData();
 
-    formData.append("post", image);
+    formData.append("postImg", image);
 
     const options2 = {
       method: "POST",
       body: formData,
-      headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk2ZjAzMWM5NmRmYjAwMTUyMWE1YmIiLCJpYXQiOjE2NzA4MzYyODAsImV4cCI6MTY3MjA0NTg4MH0.-mjIeGuDeV798UyGFGMsc5ORRw1nL5qqVP2qkCqN7MY",
-      },
     };
 
     try {
-      const endpoint = `https://striveschool-api.herokuapp.com/api/posts/${props.post._id}`;
+      const endpoint = `${apiUrl}/files/posts/${props.post._id}/image`;
+      const response = await fetch(endpoint, options2);
     } catch (error) {
       console.log(error);
     }
@@ -149,12 +146,10 @@ export default function PostPopover(props) {
       body: JSON.stringify(postInformation),
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk2ZjAzMWM5NmRmYjAwMTUyMWE1YmIiLCJpYXQiOjE2NzA4MzYyODAsImV4cCI6MTY3MjA0NTg4MH0.-mjIeGuDeV798UyGFGMsc5ORRw1nL5qqVP2qkCqN7MY",
       },
     };
     try {
-      const endpoint = `https://striveschool-api.herokuapp.com/api/posts/${props.post._id}`;
+      const endpoint = `${apiUrl}/posts/${props.post._id}`;
       const response = await fetch(endpoint, options);
       if (response.ok) {
         alert("Post edited successfully");
