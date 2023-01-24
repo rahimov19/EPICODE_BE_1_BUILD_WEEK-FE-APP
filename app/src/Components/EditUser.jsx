@@ -6,6 +6,8 @@ import { fetchUserAction } from "../Redux/Actions";
 import { useForm } from "react-hook-form";
 
 export default function EditUser() {
+  const apiUrl = process.env.REACT_APP_BE_URL;
+
   const { register, handleSubmit } = useForm();
   const [image, setImage] = useState(null);
 
@@ -21,14 +23,10 @@ export default function EditUser() {
     const options2 = {
       method: "POST",
       body: formData,
-      headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk2ZjAzMWM5NmRmYjAwMTUyMWE1YmIiLCJpYXQiOjE2NzA4MzYyODAsImV4cCI6MTY3MjA0NTg4MH0.-mjIeGuDeV798UyGFGMsc5ORRw1nL5qqVP2qkCqN7MY",
-      },
     };
 
     try {
-      const endpoint = `https://striveschool-api.herokuapp.com/api/profile/${user._id}/picture`;
+      const endpoint = `${apiUrl}/files/${user._id}/picture`;
       const response = await fetch(endpoint, options2);
     } catch (error) {
       console.log(error);
@@ -54,7 +52,7 @@ export default function EditUser() {
       },
     };
     try {
-      const endpoint = "https://striveschool-api.herokuapp.com/api/profile/";
+      const endpoint = `${apiUrl}/users/${user._id}`;
       const response = await fetch(endpoint, options);
       if (response.ok) {
         alert("User information is updated successfully");

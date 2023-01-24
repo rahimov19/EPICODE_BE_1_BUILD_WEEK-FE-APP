@@ -14,6 +14,8 @@ import { Link, useLocation } from "react-router-dom";
 import HeaderWork from "./HeaderWork";
 
 function NavBar() {
+  const apiUrl = process.env.REACT_APP_BE_URL;
+
   const [profileData, setProfileData] = useState({});
   const user = useSelector((state) => state.user.user);
   const location = useLocation();
@@ -22,13 +24,8 @@ function NavBar() {
   }, []);
   const fetchProfile = async () => {
     try {
-      const url = "https://striveschool-api.herokuapp.com/api/profile/me";
-      const response = await fetch(url, {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk3MjZmOWM5NmRmYjAwMTUyMWE1Y2QiLCJpYXQiOjE2NzA4NzIxOTksImV4cCI6MTY3MjA4MTc5OX0.yvOTDhvjHOMjzOljbQSy14jHPbW8thYnr5ZABpcn5W4",
-        },
-      });
+      const url = `${apiUrl}/users/63cfa26b0fc6da0eae47053f`;
+      const response = await fetch(url);
 
       if (response.ok) {
         const data = await response.json();

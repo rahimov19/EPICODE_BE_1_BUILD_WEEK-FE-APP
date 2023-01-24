@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { guestUserAction } from "../Redux/Actions";
 
 function Searchbar({ user }) {
+  const apiUrl = process.env.REACT_APP_BE_URL;
+
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [clicked, setClicked] = useState(false);
@@ -48,14 +50,9 @@ function Searchbar({ user }) {
 
   const fetchData = async () => {
     try {
-      const url = "https://striveschool-api.herokuapp.com/api/profile/";
+      const url = `${apiUrl}/users`;
 
-      const response = await fetch(url, {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk3MjZmOWM5NmRmYjAwMTUyMWE1Y2QiLCJpYXQiOjE2NzA4NzIxOTksImV4cCI6MTY3MjA4MTc5OX0.yvOTDhvjHOMjzOljbQSy14jHPbW8thYnr5ZABpcn5W4",
-        },
-      });
+      const response = await fetch(url);
 
       if (response.ok) {
         const data = await response.json();

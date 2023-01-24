@@ -5,6 +5,8 @@ import { Button, Modal, Form, Col } from "react-bootstrap";
 import { fetchAllPostsAction } from "../Redux/Actions";
 
 export default function AddPost() {
+  const apiUrl = process.env.REACT_APP_BE_URL;
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -13,7 +15,8 @@ export default function AddPost() {
 
   const submitChanges = async () => {
     const postInformation = {
-      //   _id: user._id,
+      user: user._id,
+      username: user.username,
       text: document.querySelector("#posttext").value,
     };
     console.log(postInformation);
@@ -23,12 +26,10 @@ export default function AddPost() {
       body: JSON.stringify(postInformation),
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk2ZjAzMWM5NmRmYjAwMTUyMWE1YmIiLCJpYXQiOjE2NzA4MzYyODAsImV4cCI6MTY3MjA0NTg4MH0.-mjIeGuDeV798UyGFGMsc5ORRw1nL5qqVP2qkCqN7MY",
       },
     };
     try {
-      const endpoint = `https://striveschool-api.herokuapp.com/api/posts/`;
+      const endpoint = `${apiUrl}/posts/`;
       const response = await fetch(endpoint, options);
       if (response.ok) {
         alert("Post created successfully");

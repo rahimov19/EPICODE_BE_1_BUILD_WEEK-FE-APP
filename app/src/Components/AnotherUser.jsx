@@ -8,6 +8,8 @@ import FooterPart from "./FooterPart";
 import PostsUser from "./PostsUser";
 
 export default function AnotherUser() {
+  const apiUrl = process.env.REACT_APP_BE_URL;
+
   const guest = useSelector((state) => state.user.guest);
   const users = useSelector((state) => state.user.users);
   const [guestxp, setguestxp] = useState();
@@ -21,15 +23,7 @@ export default function AnotherUser() {
   }, [guest]);
   const fetchXp = async () => {
     try {
-      let response = await fetch(
-        `https://striveschool-api.herokuapp.com/api/profile/${guest._id}/experiences`,
-        {
-          headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk2ZjAzMWM5NmRmYjAwMTUyMWE1YmIiLCJpYXQiOjE2NzA4MzYyODAsImV4cCI6MTY3MjA0NTg4MH0.-mjIeGuDeV798UyGFGMsc5ORRw1nL5qqVP2qkCqN7MY",
-          },
-        }
-      );
+      let response = await fetch(`${apiUrl}/users/${guest._id}/experiences`);
       if (response.ok) {
         let data = await response.json();
         setguestxp(data);

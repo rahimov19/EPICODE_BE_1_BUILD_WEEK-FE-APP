@@ -6,6 +6,8 @@ import { fetchExperienceAction } from "../Redux/Actions";
 import { useForm } from "react-hook-form";
 
 export default function EditExperience(props) {
+  const apiUrl = process.env.REACT_APP_BE_URL;
+
   const { register, handleSubmit } = useForm();
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -17,15 +19,9 @@ export default function EditExperience(props) {
   const deleteFuncition = async () => {
     const options = {
       method: "DELETE",
-
-      headers: {
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk2ZjAzMWM5NmRmYjAwMTUyMWE1YmIiLCJpYXQiOjE2NzA4MzYyODAsImV4cCI6MTY3MjA0NTg4MH0.-mjIeGuDeV798UyGFGMsc5ORRw1nL5qqVP2qkCqN7MY",
-      },
     };
     try {
-      const endpoint = `https://striveschool-api.herokuapp.com/api/profile/${user._id}/experiences/${props.xp._id}`;
+      const endpoint = `${apiUrl}/users/${user._id}/experiences/${props.xp._id}`;
       const response = await fetch(endpoint, options);
       if (response.ok) {
         alert(`User information is deleted successfully`);
@@ -42,7 +38,7 @@ export default function EditExperience(props) {
   const submitChanges = async () => {
     const formData = new FormData();
 
-    formData.append("experience", image);
+    formData.append("expImg", image);
 
     const options2 = {
       method: "POST",
@@ -54,7 +50,7 @@ export default function EditExperience(props) {
     };
 
     try {
-      const endpoint = `https://striveschool-api.herokuapp.com/api/profile/${user._id}/experiences/${props.xp._id}/picture`;
+      const endpoint = `${apiUrl}/files/users/${user._id}/experiences/${props.xp._id}/image`;
       const response = await fetch(endpoint, options2);
     } catch (error) {
       console.log(error);
@@ -81,7 +77,7 @@ export default function EditExperience(props) {
       },
     };
     try {
-      const endpoint = `https://striveschool-api.herokuapp.com/api/profile/${user._id}/experiences/${props.xp._id}`;
+      const endpoint = `${apiUrl}/users/${user._id}/experiences/${props.xp._id}`;
       const response = await fetch(endpoint, options);
       if (response.ok) {
         alert("User information is updated successfully");

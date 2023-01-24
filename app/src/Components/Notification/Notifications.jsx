@@ -6,17 +6,12 @@ import NotificationFooter from "./NotificationFooter";
 import { Link } from "react-router-dom";
 
 const Notifications = () => {
+  const apiUrl = process.env.REACT_APP_BE_URL;
+
   const [notification, setNotification] = useState([]);
   const fetchingData = async () => {
     try {
-      let res = await fetch(
-        "https://striveschool-api.herokuapp.com/api/profile/",
-        {
-          headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk4MzAzNTQwNWJkYTAwMTUwOTE4NDAiLCJpYXQiOjE2NzA5MTgxOTcsImV4cCI6MTY3MjEyNzc5N30.3Ioocf2mosK7X_9xleOCa66Deo_OvP1I7pNBTw7Qrko`,
-          },
-        }
-      );
+      let res = await fetch(`${apiUrl}/users/`);
       if (res.ok) {
         let userProfile = await res.json();
         setNotification(userProfile);
@@ -58,7 +53,6 @@ const Notifications = () => {
           </Col>
         </Row>
       </Container>
-    
     </>
   );
 };

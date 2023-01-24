@@ -12,6 +12,8 @@ export default function AddExperience() {
   const handleShow = () => setShow(true);
 
   const submitChanges = async () => {
+    const apiUrl = process.env.REACT_APP_BE_URL;
+
     const experienceInformation = {
       //   _id: user._id,
       role: document.querySelector("#role").value,
@@ -28,12 +30,10 @@ export default function AddExperience() {
       body: JSON.stringify(experienceInformation),
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk2ZjAzMWM5NmRmYjAwMTUyMWE1YmIiLCJpYXQiOjE2NzA4MzYyODAsImV4cCI6MTY3MjA0NTg4MH0.-mjIeGuDeV798UyGFGMsc5ORRw1nL5qqVP2qkCqN7MY",
       },
     };
     try {
-      const endpoint = `https://striveschool-api.herokuapp.com/api/profile/${user._id}/experiences`;
+      const endpoint = `${apiUrl}/users/${user._id}/experiences`;
       const response = await fetch(endpoint, options);
       if (response.ok) {
         alert("User information is updated successfully");

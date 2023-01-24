@@ -10,6 +10,8 @@ import ExperienceUser from "./ExperienceUser";
 import PostsUser from "./PostsUser";
 
 export default function Profile() {
+  const apiUrl = process.env.REACT_APP_BE_URL;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [userxp, setuserxp] = useState();
@@ -34,15 +36,7 @@ export default function Profile() {
 
   const fetchXp = async () => {
     try {
-      let response = await fetch(
-        `https://striveschool-api.herokuapp.com/api/profile/${user._id}/experiences`,
-        {
-          headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk2ZjAzMWM5NmRmYjAwMTUyMWE1YmIiLCJpYXQiOjE2NzA4MzYyODAsImV4cCI6MTY3MjA0NTg4MH0.-mjIeGuDeV798UyGFGMsc5ORRw1nL5qqVP2qkCqN7MY",
-          },
-        }
-      );
+      let response = await fetch(`${apiUrl}/users/${user._id}/experiences`);
       if (response.ok) {
         let data = await response.json();
         setuserxp(data);
