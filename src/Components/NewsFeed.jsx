@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
@@ -10,7 +10,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import PetsIcon from "@mui/icons-material/Pets";
 import PostPopover from "./PostPopover";
 import { useNavigate } from "react-router-dom";
-import { guestUserAction } from "../Redux/Actions";
+import { fetchAllPostsAction, guestUserAction } from "../Redux/Actions";
 
 export default function NewsFeed() {
   // function getMultipleRandom(arr, num) {
@@ -23,9 +23,38 @@ export default function NewsFeed() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_BE_URL;
   const user = useSelector((state) => state.user.user);
   const posts = useSelector((state) => state.posts.posts);
+  const [comment, setComment] = useState("");
+  console.log(posts);
+  const publishComment = async (postId) => {
+    const commentObj = {
+      user: user._id,
+      comment: comment,
+    };
+    const options = {
+      method: "POST",
+      body: JSON.stringify(commentObj),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const endpoint = `${apiUrl}/posts/${postId}/comments`;
+      const response = await fetch(endpoint, options);
+      if (response.ok) {
+        console.log("Comment Created");
+      } else {
+        throw new Error("Error while uploading information");
+      }
+    } catch (error) {
+      console.log(error);
+    }
 
+    dispatch(fetchAllPostsAction());
+    document.querySelector("#commentInput").value = "";
+  };
   return (
     <>
       {posts[0] ? (
@@ -81,22 +110,22 @@ export default function NewsFeed() {
                 />
               </div>
               <div className="d-flex  align-items-center mt-2">
-                <div>
+                <div className="w-20 d-flex">
                   <RecommendIcon id="button11" />
                   <StarsIcon id="button22" />
                   <FavoriteIcon id="button33" />
                   <PetsIcon id="button44" />
                 </div>
-                <p className="likedPeople">
-                  {user.name} and {Math.floor(Math.random() * 1400)} others
-                  Liked this Post
+                <p className="likedPeople w-50">
+                  <b>{user.name}</b> and {Math.floor(Math.random() * 400)}{" "}
+                  others Liked this Post
                 </p>
                 <p className="likedPeople2">
-                  {Math.floor(Math.random() * 1400)} Comments{" "}
-                  {Math.floor(Math.random() * 1400)} Shares
+                  {Math.floor(Math.random() * 200)} Comments{" "}
+                  {Math.floor(Math.random() * 200)} Shares
                 </p>
               </div>
-              <div className="buttonsdiv">
+              <div className="buttonsdiv w-100 mx-auto">
                 <Button className="postbutton mr-1">
                   <ThumbUpAltIcon />
                   Like
@@ -178,22 +207,22 @@ export default function NewsFeed() {
               />
             </div>
             <div className="d-flex  align-items-center mt-2">
-              <div>
+              <div className="w-20 d-flex">
                 <RecommendIcon id="button11" />
                 <StarsIcon id="button22" />
                 <FavoriteIcon id="button33" />
                 <PetsIcon id="button44" />
               </div>
-              <p className="likedPeople">
-                {user.name} and {Math.floor(Math.random() * 1400)} others Liked
-                this Post
+              <p className="likedPeople w-50">
+                <b>{user.name}</b> and {Math.floor(Math.random() * 400)} others
+                Liked this Post
               </p>
               <p className="likedPeople2">
-                {Math.floor(Math.random() * 1400)} Comments{" "}
-                {Math.floor(Math.random() * 1400)} Shares
+                {Math.floor(Math.random() * 200)} Comments{" "}
+                {Math.floor(Math.random() * 200)} Shares
               </p>
             </div>
-            <div className="buttonsdiv">
+            <div className="buttonsdiv w-100 mx-auto">
               <Button className="postbutton mr-1">
                 <ThumbUpAltIcon />
                 Like
@@ -209,6 +238,43 @@ export default function NewsFeed() {
               <Button className="postbutton mr-1">
                 <i class="bi bi-send"></i>Send
               </Button>
+            </div>
+            <div className="d-flex justify-content-between mt-2 ">
+              <input
+                type="text"
+                name="comment"
+                id="commentInput"
+                placeholder="Comment this post"
+                onChange={(e) => setComment(e.target.value)}
+              />
+              <Button variant="info" onClick={() => publishComment(post._id)}>
+                Publish
+              </Button>
+            </div>
+            <div className="mt-3">
+              {post.comments ? (
+                post.comments.map((com) => (
+                  <div className="d-flex commentDiv mb-1">
+                    {" "}
+                    <img
+                      src={com.user.image}
+                      alt="userImg"
+                      className="commentUserImg mr-2"
+                    />{" "}
+                    <div className="d-flex flex-column justify-content-center my-auto">
+                      <p className="m-0">
+                        <b>
+                          {com.user.name} {com.user.surname}
+                        </b>
+                      </p>
+                      <p className="mb-1">{com.comment}</p>
+                    </div>
+                    <i className="bi bi-three-dots ml-auto pl-1"></i>
+                  </div>
+                ))
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         ))

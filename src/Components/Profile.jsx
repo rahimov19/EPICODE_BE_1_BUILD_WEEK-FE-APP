@@ -47,7 +47,15 @@ export default function Profile() {
       console.log(error);
     }
   };
-
+  const getPdf = async () => {
+    try {
+      const pfdUrl = `${apiUrl}/files/${user._id}/pdf`;
+      const pdf = await fetch(pfdUrl);
+      window.location.replace(pfdUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <Container id="main">
@@ -75,7 +83,10 @@ export default function Profile() {
                   <div id="userbuttons">
                     <Button id="userbutton1"> Interested </Button>
                     <Button id="userbutton2"> Add something to profile </Button>
-                    <Button id="userbutton3"> More </Button>
+                    <Button id="userbutton3" onClick={() => getPdf()}>
+                      {" "}
+                      Get CV{" "}
+                    </Button>
                   </div>
                 </Col>
                 <Col xs={4} id="companiesCol">

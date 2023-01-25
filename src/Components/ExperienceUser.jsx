@@ -6,18 +6,32 @@ import { useNavigate } from "react-router-dom";
 import { Col } from "react-bootstrap";
 
 export default function ExperienceUser() {
+  const apiUrl = process.env.REACT_APP_BE_URL;
+  const user = useSelector((state) => state.user.user);
+  const downloadCSV = async () => {
+    try {
+      const csvFile = await fetch(
+        `${apiUrl}/files/${user._id}/experiences/CSV`
+      );
+      console.log(csvFile);
+      window.open(csvFile.url, "_blank").focus();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const navigate = useNavigate();
   const experienceList = useSelector((state) => state.experience.experience);
   return (
     <Col xs={12} className="experience bgWhite w-100 p-4">
-      <div className="experienceC4">
+      <div className="experienceC4 w-70">
         <h4 className="mb-4">Job Experience</h4>
-        <div>
+        <div className="w-30 d-flex mr-4">
           <AddExperience />
           <i
             className="bi bi-pencil-fill"
             onClick={() => navigate("/profile/experience")}
           ></i>
+          <i class="bi bi-download" onClick={() => downloadCSV()}></i>
         </div>
       </div>
       {experienceList[0] ? (

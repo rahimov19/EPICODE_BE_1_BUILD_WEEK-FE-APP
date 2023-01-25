@@ -44,8 +44,6 @@ function Searchbar({ user }) {
   const navigate = useNavigate();
 
   const goToProfile = (guest) => {
-    const searchBar = document.querySelector(".searchBar");
-    searchBar.reset();
     dispatch(guestUserAction(guest));
     navigate(`/guest/${guest._id}`);
   };

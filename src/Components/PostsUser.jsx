@@ -86,6 +86,7 @@ export default function PostsUser(props) {
                   <i class="bi bi-send"></i>Send
                 </Button>
               </div>
+              <div></div>
             </Col>
           ))
       ) : (
