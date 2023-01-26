@@ -1079,6 +1079,11 @@ h3 {
   height: 25px;
   width: 25px;
 }
+.requestUserPic {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
 .bi-three-dots:hover {
   background-color: #8383836f;
   border-radius: 50%;

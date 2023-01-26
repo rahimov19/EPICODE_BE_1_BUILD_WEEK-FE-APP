@@ -1,18 +1,53 @@
+import { unstable_ownerWindow } from "@mui/utils";
 import React from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { guestUserAction } from "../Redux/Actions";
+import { fetchUserAction, guestUserAction } from "../Redux/Actions";
 
 export default function Network() {
+  const apiUrl = process.env.REACT_APP_BE_URL;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const gotoProfile = (user1) => {
-    dispatch(guestUserAction(user1));
-    navigate(`/guest/${user1._id}`);
+  const gotoProfile = (activeConnection) => {
+    dispatch(guestUserAction(activeConnection));
+    navigate(`/guest/${activeConnection._id}`);
   };
   const user = useSelector((state) => state.user.user);
   const users = useSelector((state) => state.user.users);
+  const options = { method: "PUT" };
+  const approveRequest = async (conId) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/requests/${user._id}/acceptRequest/${conId}`,
+        options
+      );
+      if (response.ok) {
+        console.log("Approved Succesfully");
+        dispatch(fetchUserAction());
+      } else {
+        console.log("Error while approving");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const declineRequest = async (conId) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/requests/${user._id}/declineRequest/${conId}`,
+        options
+      );
+      if (response.ok) {
+        console.log("Declined Succesfully");
+        dispatch(fetchUserAction());
+      } else {
+        console.log("Error while declining");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Container>
       <Row>
@@ -60,18 +95,55 @@ export default function Network() {
           </div>
         </Col>
         <Col xs={8}>
-          <div className="bgWhite d-flex justify-content-between align-items-center px-4 py-2 my-4">
-            <p className="py-2 m-0">No new contacts</p>{" "}
-            <span className="configurespan">Congirufe</span>
+          <div className="bgWhite d-flex flex-column justify-content-between px-4 py-2 my-4">
+            <h5>New Friends requests:</h5>
+            {user.connections.pending.length > 0 ? (
+              user.connections.pending.map((connection) => (
+                <div className="d-flex mb-2">
+                  <img
+                    src={connection.user.image}
+                    alt="meow"
+                    className="requestUserPic"
+                  />
+                  <div className="d-flex">
+                    <h6 className="mx-2">
+                      <b>
+                        {" "}
+                        {connection.user.name} {connection.user.surname}
+                      </b>
+                    </h6>
+                    <p>{connection.text}</p>
+                  </div>
+                  <div className="d-flex ml-auto">
+                    <i
+                      className="bi bi-check-circle mr-1"
+                      onClick={() => approveRequest(connection._id)}
+                    ></i>{" "}
+                    <i
+                      className="bi bi-x-circle"
+                      onClick={() => declineRequest(connection._id)}
+                    ></i>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <>
+                {" "}
+                <div className="d-flex">
+                  <p className="py-2 m-0">No new requests</p>{" "}
+                  <span className="configurespan ml-auto">Congirufe</span>
+                </div>
+              </>
+            )}
           </div>
           <div className="bgWhite px-3 py-4">
             <div className="d-flex justify-content-between mb-3">
-              <h5>People in this area</h5>
+              <h5>Your Friends Network</h5>
               <span>See All</span>
             </div>
             <Row>
-              {users ? (
-                users.slice(0, 18).map((user1, i) => (
+              {user.connections.active.length > 0 ? (
+                user.connections.active.map((activeConnection, i) => (
                   <Col xs={4}>
                     <Card style={{ width: "100%" }}>
                       <Card.Img
@@ -82,26 +154,29 @@ export default function Network() {
                       <Card.Body>
                         <Card.Title
                           className="pt-3 cardtitleuser"
-                          onClick={() => gotoProfile(user1)}
+                          onClick={() => gotoProfile(activeConnection.user)}
                         >
                           <img
                             src={
-                              user1.image
-                                ? user1.image
+                              activeConnection.user.image
+                                ? activeConnection.user.image
                                 : "https://placekitten.com/400"
                             }
                             alt={"userimg"}
                             className={"carduserava"}
                           />
-                          {user1.name} {user1.surname}
+                          {activeConnection.user.name}{" "}
+                          {activeConnection.user.surname}
                         </Card.Title>
                         <Card.Text className="cardtextuser">
-                          {user1.title}
+                          {activeConnection.user.title}
                           <p className="cardfollowers">
-                            {Math.floor(Math.random() * 2000)} Followers
+                            {Math.floor(Math.random() * 500)} Followers
                           </p>
                         </Card.Text>
-                        <Button className="cardbuttonuser">Follow</Button>
+                        <Button className="cardbuttonuser">
+                          Send a message
+                        </Button>
                       </Card.Body>
                     </Card>
                   </Col>
