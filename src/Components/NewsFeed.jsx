@@ -11,6 +11,7 @@ import PetsIcon from "@mui/icons-material/Pets";
 import PostPopover from "./PostPopover";
 import { useNavigate } from "react-router-dom";
 import { fetchAllPostsAction, guestUserAction } from "../Redux/Actions";
+import CommentPopover from "./CommentPopover";
 
 export default function NewsFeed() {
   // function getMultipleRandom(arr, num) {
@@ -269,7 +270,7 @@ export default function NewsFeed() {
                       </p>
                       <p className="mb-1">{com.comment}</p>
                     </div>
-                    <i className="bi bi-three-dots ml-auto pl-1"></i>
+                    <CommentPopover postId={post._id} com={com} />
                   </div>
                 ))
               ) : (
